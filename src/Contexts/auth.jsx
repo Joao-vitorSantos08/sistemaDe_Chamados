@@ -1,17 +1,29 @@
-import { useState, createContext, useEffect, use } from "react";
+import { useState, createContext, useEffect, } from "react";
 import { auth, db } from "../services/firebaseConnction"
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export const AuthContext = createContext({})
 
 const AuthProvider = ({ children }) => {
-
     const [user, setUser] = useState(null)
     const [loadingAuth, setLoadingAuth] = useState(false)
+    const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const loadUser = async () => {
+            const storageUser = localStorage.getItem("@tickets")
+            if (storageUser) {
+                setUser(JSON.parse(storageUser))
+                setLoading(false)
+            }
+            setLoading(false)
+        }
+        loadUser()
+    }, [])
 
     const signIn = async (email, password) => {
         setLoadingAuth(true)
@@ -78,6 +90,12 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("@tickets", JSON.stringify(data))
     }
 
+    const logout = async () => {
+        await signOut(auth)
+        localStorage.removeItem("@tickets")
+        setUser(null)
+    }
+
     return (
 
         <AuthContext.Provider value={{
@@ -85,7 +103,9 @@ const AuthProvider = ({ children }) => {
             user,
             signIn,
             signUp,
-            loadingAuth
+            logout,
+            loadingAuth,
+            loading
         }}>
             {children}
         </AuthContext.Provider>

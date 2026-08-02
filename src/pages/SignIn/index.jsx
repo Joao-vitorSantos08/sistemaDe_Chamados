@@ -1,12 +1,22 @@
 import "./signIn.css"
 import logo from "../../assets/images/logo.png"
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { Link } from "react-router-dom"
+import { AuthContext } from "../../Contexts/auth"
 
 const SignIn = () => {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
+    const { signIn, loadingAuth } = useContext(AuthContext)
+
+    const handleSignIn = async (e) => {
+        e.preventDefault()
+        if (email !== "" && password !== "") {
+            await signIn(email, password)
+        }
+    }
 
     return (
         <div className="container-center">
@@ -15,7 +25,7 @@ const SignIn = () => {
                     <img src={logo} alt="Logo do sistema de chamados " />
                 </div>
 
-                <form>
+                <form onSubmit={handleSignIn}>
                     <h1>Entrar</h1>
                     <input type="text" placeholder="email@email.com"
                         value={email} onChange={(e) => setEmail(e.target.value)}
@@ -23,7 +33,9 @@ const SignIn = () => {
                     <input type="text" placeholder="Digite sua senha"
                         value={password} onChange={(e) => setPassword(e.target.value)}
                     />
-                    <button type="submit" >Acessar</button>
+                    <button type="submit" >
+                        {loadingAuth ? "Carregando.." : "Acessar"}
+                    </button>
                 </form>
                 <Link to="/register">Não possui uma conta? Cadastrar-se</Link>
             </div>

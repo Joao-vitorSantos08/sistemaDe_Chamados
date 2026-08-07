@@ -17,7 +17,7 @@ const Profile = () => {
     const [avatarUrl, setAvataUrl] = useState(user && user.avatarURL)
     const [imageAvatar, setImageAvatar] = useState(null)
     const [nome, setNome] = useState(user && user.nome)
-    const [email, setemail] = useState(user && user.email)
+    const email = (user && user.email)
 
     const hadleFile = (e) => {
         if (e.target.files && e.target.files[0]) {
@@ -38,7 +38,8 @@ const Profile = () => {
     const handleUpload = async () => {
         const currentUid = user.uid
         const uploadRef = ref(storage, `images/${currentUid}/${imageAvatar.name}`)
-        const uploadTask = uploadBytes(uploadRef, imageAvatar)
+        uploadBytes(uploadRef, imageAvatar)
+        
             .then((snapshot) => {
                 getDownloadURL(snapshot.ref).then(async (downloadURL) => {
                     let urlFoto = downloadURL;

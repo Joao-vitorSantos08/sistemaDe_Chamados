@@ -17,7 +17,6 @@ const Dashboard = () => {
     const [isEmpety, setInEmpety] = useState(false)
     const [lastDocs, setLastDocs] = useState()
     const [loadingMore, setloadingMore] = useState(false)
-
     useEffect(() => {
         const loadChamado = async () => {
             const q = query(listaRef, orderBy("created", "desc"), limit(5))
@@ -25,7 +24,6 @@ const Dashboard = () => {
             setChamados([])
             await updateState(querySnapshot)
             setLoading(false)
-
         }
         loadChamado()
         return () => { }
@@ -48,8 +46,8 @@ const Dashboard = () => {
                 })
             })
             const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1]
-             setLastDocs(lastDoc)
-                setChamados(chamados => [...chamados, ...lista])
+            setLastDocs(lastDoc)
+            setChamados(chamados => [...chamados, ...lista])
         } else {
             setInEmpety(true)
         }
@@ -72,7 +70,7 @@ const Dashboard = () => {
         )
     }
 
-    const hadleMore = async() => {
+    const hadleMore = async () => {
         setloadingMore(true)
         const q = query(listaRef, orderBy("created", "desc"), startAfter(lastDocs), limit(3))
         const querySnapshot = await getDocs(q)
@@ -119,7 +117,7 @@ const Dashboard = () => {
                                             <td data-label="Cliente">{item.cliente}</td>
                                             <td data-label="Assunto">{item.assunto}</td>
                                             <td data-label="Status">
-                                                <span className="badge" style={{backgroundColor: item.status === "Aberto" ? "#5cb85c" : "#999"}} > 
+                                                <span className="badge" style={{ backgroundColor: item.status === "Aberto" ? "#5cb85c" : "#999" }} >
                                                     {item.status}
                                                 </span>
                                             </td>
@@ -128,17 +126,17 @@ const Dashboard = () => {
                                                 <button className="action" style={{ backgroundColor: "#3583f6" }}>
                                                     <FiSearch color="#FFF" size={25} />
                                                 </button>
-                                                <button className="action" style={{ backgroundColor: "#f6a935" }}>
+                                                <Link to={`/new/${item.id}`} className="action" style={{ backgroundColor: "#f6a935" }}>
                                                     <FiEdit2 color="#FFF" size={25} />
-                                                </button>
+                                                </Link>
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
-                                
+
                             </table>
-                           {loadingMore &&  <h3>Buscado mais chamados...</h3>}
-                           {!loadingMore && !isEmpety &&  <button className="btnMore" onClick={hadleMore}>Buscar</button>}
+                            {loadingMore && <h3>Buscado mais chamados...</h3>}
+                            {!loadingMore && !isEmpety && <button className="btnMore" onClick={hadleMore}>Buscar</button>}
                         </>
                     )}
 
@@ -147,6 +145,4 @@ const Dashboard = () => {
         </div>
     )
 }
-
-
 export default Dashboard

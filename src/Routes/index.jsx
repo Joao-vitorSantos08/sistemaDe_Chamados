@@ -16,6 +16,7 @@ const RoutesApp = () => {
             <Route path="/profile" element={<Private> <Profile /> </Private>} />
             <Route path="/customers" element={<Private> <Customers /> </Private>} />
             <Route path="/new" element={<Private> <NewChamado /> </Private>} />
+            <Route path="/new/:id" element={<Private> <NewChamado /> </Private>} />
         </Routes>
     )
 }

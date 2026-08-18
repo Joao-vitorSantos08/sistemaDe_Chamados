@@ -5,8 +5,9 @@ import "./new.css"
 import { useState, useEffect, useContext } from "react"
 import { AuthContext } from "../../Contexts/auth"
 import { db } from "../../services/firebaseConnction"
-import { collection, getDocs, getDoc, doc, addDoc } from "firebase/firestore"
+import { collection, getDocs, getDoc, doc, addDoc, updateDoc } from "firebase/firestore"
 import { toast } from "react-toastify"
+import { useParams, useNavigate} from "react-router-dom"
 
 const listaRef = collection(db, "customers")
 
@@ -15,13 +16,17 @@ const NewChamado = () => {
     const [customes, setcustomer] = useState([])
     const [loadCustomer, setLoadCustomer] = useState(true)
     const [customerSelected, setCustomerSelected] = useState(0)
+    const [idCustomer, setIdCustomer] = useState(false)
+    const navigate = useNavigate()
 
     const [complemento, setComplemento] = useState("")
     const [assunto, setAssunto] = useState("Suporte")
     const [status, setStatus] = useState("Aberto")
+    const { id } = useParams()
 
     useEffect(() => {
         const loadCustomer = async () => {
+
             const querySnapshot = await getDocs(listaRef)
                 .then((snapshot) => {
                     let lista = []
@@ -40,6 +45,9 @@ const NewChamado = () => {
                     }
                     setcustomer(lista)
                     setLoadCustomer(false)
+                    if (id) {
+                        loadId(lista)
+                    }
                 })
                 .catch((error) => {
                     console.log("Erro ao buscar os clientes" + error)
@@ -49,7 +57,24 @@ const NewChamado = () => {
         }
 
         loadCustomer()
-    }, [])
+    }, [id])
+
+    const loadId = async (lista) => {
+        const docref = doc(db, "chamados", id)
+        await getDoc(docref)
+            .then((snapshot) => {
+                setAssunto(snapshot.data().assunto)
+                setStatus(snapshot.data().status)
+                setComplemento(snapshot.data().complemento)
+                let index = lista.findIndex(item => item.id === snapshot.data().clienteId)
+                setCustomerSelected(index)
+                setIdCustomer(true)
+            })
+            .catch((error) => {
+                console.log(error)
+                setIdCustomer(false)
+            })
+    }
 
     const handleOptionChange = (e) => {
         setStatus(e.target.value)
@@ -66,6 +91,23 @@ const NewChamado = () => {
     const handleRegister = async (e) => {
         e.preventDefault()
 
+        if (idCustomer) {
+            const docRef = doc(db, "chamados", id)
+            await updateDoc(docRef, {
+                cliente: customes[customerSelected].nomeFantasia,
+                clienteId: customes[customerSelected].id,
+                assunto: assunto,
+                complemento: complemento,
+                status: status,
+                userId: user.uid
+            })
+            toast.info("Chamado atulizado com sucesso")
+            setCustomerSelected(0)
+            setComplemento("")
+            navigate("/dashboard")
+
+            return
+        }
         await addDoc(collection(db, "chamados"), {
             created: new Date(),
             cliente: customes[customerSelected].nomeFantasia,
@@ -89,7 +131,7 @@ const NewChamado = () => {
         <div>
             <Header />
             <div className="content">
-                <Title name="Novo chamado">
+                <Title name={id? "Editando chamado" : "Novo chamado"}>
                     <FiPlusCircle size={25} />
                 </Title>
                 <div className="container">

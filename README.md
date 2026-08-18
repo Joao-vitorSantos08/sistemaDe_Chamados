@@ -39,7 +39,7 @@ Este foi meu primeiro projeto utilizando a Context API em uma aplicação mais c
 * [x] Listagem de clientesClientes.png
 * [x] Abertura de novos chamados
 * [x] Listagem dos chamados cadastrados
-* [ ] Visualização dos detalhes de um chamado através de um modal
+* [x] Visualização dos detalhes de um chamado através de um modal
 * [x] Alteração do status dos chamados
 * [x] Edição de chamados
 
@@ -62,9 +62,9 @@ Este foi meu primeiro projeto utilizando a Context API em uma aplicação mais c
 
 ---
 
-O projeto está disponível online:
+O projeto está disponível online
 
-**➡️ Acesse aqui:** COLE_AQUI_O_LINK_DO_PROJETO
+➡️ [Clique aqui para acessar](https://sistema-de-chamados-delta.vercel.app/profile) 
 
 ## 🛠 Tecnologias
 

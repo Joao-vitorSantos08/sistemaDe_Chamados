@@ -11,7 +11,6 @@ const Header = () => {
     return (
         <header className="sidbar">
             <div>
-                <img src={user.avatarURL === null ? user.avatarURL : avatar} alt="foto de usuário" />
             </div>
             <nav>
                 <ul>

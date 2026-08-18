@@ -5,7 +5,7 @@
  <a href="#-sobre-o-projeto">Sobre</a> •
  <a href="#-funcionalidades">Funcionalidades</a> •
  <a href="#-layout">Layout</a> •
- <a href="#-como-executar-o-projeto">Como executar</a> •
+ <a href="#-Projeto-Online">Projeto Online</a> •
  <a href="#-tecnologias">Tecnologias</a> •
  <a href="#-autor">Autor</a>
 </p>
@@ -61,8 +61,7 @@ Este foi meu primeiro projeto utilizando a Context API em uma aplicação mais c
 ![Mobile1](Modal.png)
 
 ---
-
-O projeto está disponível online
+## Projeto Online
 
 ➡️ [Clique aqui para acessar](https://sistema-de-chamados-delta.vercel.app/profile) 
 

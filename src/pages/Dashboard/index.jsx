@@ -8,6 +8,8 @@ import { Link } from "react-router-dom"
 import { collection, getDocs, orderBy, limit, startAfter, query } from "firebase/firestore"
 import { db } from "../../services/firebaseConnction"
 import { format } from "date-fns"
+import Modal from "../../components/Modal"
+import { it } from "date-fns/locale"
 
 const listaRef = collection(db, "chamados")
 
@@ -17,6 +19,9 @@ const Dashboard = () => {
     const [isEmpety, setInEmpety] = useState(false)
     const [lastDocs, setLastDocs] = useState()
     const [loadingMore, setloadingMore] = useState(false)
+    const [modal, setModal] = useState(false)
+    const [detail, setDetail] = useState()
+
     useEffect(() => {
         const loadChamado = async () => {
             const q = query(listaRef, orderBy("created", "desc"), limit(5))
@@ -77,6 +82,11 @@ const Dashboard = () => {
         await updateState(querySnapshot)
     }
 
+    const toggleModal = (item)=>{
+        setModal(!modal)
+        setDetail(item)
+    }
+
     return (
         <div>
             <Header />
@@ -123,7 +133,7 @@ const Dashboard = () => {
                                             </td>
                                             <td data-label="Cadastrado">{item.createdFormat}</td>
                                             <td data-label="#">
-                                                <button className="action" style={{ backgroundColor: "#3583f6" }}>
+                                                <button className="action" style={{ backgroundColor: "#3583f6" }} onClick={() => toggleModal(item)}>
                                                     <FiSearch color="#FFF" size={25} />
                                                 </button>
                                                 <Link to={`/new/${item.id}`} className="action" style={{ backgroundColor: "#f6a935" }}>
@@ -142,6 +152,12 @@ const Dashboard = () => {
 
                 </>
             </div>
+            {modal && (
+                <Modal 
+                    conteudo={detail}
+                    close={() => setModal(!modal)}
+                />
+            )}
         </div>
     )
 }
